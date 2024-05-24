@@ -1,3 +1,15 @@
+
+
+
+
+
+
+////Я убрал обращение к переменным ROLE_USER и ROLE_ADMIN
+///Сделал обращение к базе данных, чтобы из нее доставались все роли,
+//Что позволит добавлять еще роли в роект и не менять при этом фронт
+
+
+
 async function getRoles() {
     const response = await fetch(`/api/admin/role`);
     return await response.json();
@@ -22,6 +34,8 @@ async function addNewUserForm() {
         const password = newUserForm.querySelector("#password").value.trim();
 
         const rolesSelected = document.getElementById("roles");
+
+
 
         let allRole = await getRoles();
         let AllRoles = {};
