@@ -1,3 +1,8 @@
+async function getRoles() {
+    const response = await fetch(`/api/admin/role`);
+    return await response.json();
+}
+
 async function sendDataEditUser(user) {
     await fetch("/api/admin" ,
         {method:"PUT", headers: {'Content-type': 'application/json'}, body: JSON.stringify(user)} )
@@ -14,12 +19,15 @@ modalEdit.addEventListener("submit", async function(event){
 
     const rolesSelected = document.getElementById("rolesEdit");
 
+    let allRole = await getRoles();
+    let AllRoles = {};
+    for (let x of allRole) {
+        AllRoles[x.roleName] = x.id;
+    }
     let roles = [];
     for (let option of rolesSelected.selectedOptions) {
-        if(option.value === ROLE_USER.roleName) {
-            roles.push(ROLE_USER);
-        } else if (option.value === ROLE_ADMIN.roleName) {
-            roles.push(ROLE_ADMIN);
+        if (Object.keys(AllRoles).indexOf(option.value) != -1) {
+            roles.push({roleId: AllRoles[option.value], roleName: option.value});
         }
     }
 

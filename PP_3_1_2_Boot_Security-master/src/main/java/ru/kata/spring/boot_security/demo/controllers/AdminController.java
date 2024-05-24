@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -54,6 +55,13 @@ public class AdminController {
         userService.deleteUser(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @GetMapping("/role")
+    public ResponseEntity<List<Role>> getRole() {
+        return new ResponseEntity<>(roleService.findAll(), HttpStatus.OK);
+    }
+
+
 }
 
 

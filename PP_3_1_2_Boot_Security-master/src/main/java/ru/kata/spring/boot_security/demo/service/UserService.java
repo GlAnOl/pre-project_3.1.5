@@ -16,7 +16,7 @@ public interface UserService extends UserDetailsService {
 
     public boolean saveUser(User user);
 
-    public boolean saveUser(User user, Set<Role> roles);
+//    public boolean saveUser(User user, Set<Role> roles);
 
     public List<User> getListAllUsers();
 

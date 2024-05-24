@@ -33,11 +33,14 @@ public class CommandLineInit implements CommandLineRunner {
         roleService.addRole(roleAdmin);
 
 
-        userService.saveUser(new User("admin", "a", "adminovich", 33, "admin@mail.com"),
-                new HashSet<Role>(Set.of(roleAdmin, roleUser)));
-        userService.saveUser(new User("user", "u", "usereovich", 22, "user@mail.com"),
-                new HashSet<Role>(Set.of(roleUser)));
+        User user = new User("user", "u", "usereovich", 22, "user@mail.com");
+        User admin = new User("admin", "a", "adminovich", 33, "admin@mail.com");
 
+        user.setRoles(  new HashSet<Role>(Set.of(roleUser)));
+        admin.setRoles(new HashSet<Role>(Set.of(roleAdmin, roleUser)));
+
+        userService.saveUser(user);
+        userService.saveUser(admin);
 
     }
 }

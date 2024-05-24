@@ -1,6 +1,12 @@
+async function getRoles() {
+    const response = await fetch(`/api/admin/role`);
+    return await response.json();
+}
+
+
 async function createNewUser(user) {
-        await fetch("/api/admin",
-        {method: 'POST',headers: {'Content-Type': 'application/json'}, body: JSON.stringify(user)})
+    await fetch("/api/admin",
+        {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(user)})
 }
 
 async function addNewUserForm() {
@@ -17,20 +23,24 @@ async function addNewUserForm() {
 
         const rolesSelected = document.getElementById("roles");
 
+        let allRole = await getRoles();
+        let AllRoles = {};
+        for (let x of allRole) {
+            AllRoles[x.roleName] = x.id;
+        }
         let roles = [];
         for (let option of rolesSelected.selectedOptions) {
-            if(option.value === ROLE_USER.roleName) {
-                roles.push(ROLE_USER);
-            } else if (option.value === ROLE_ADMIN.roleName) {
-                roles.push(ROLE_ADMIN);
+            if (Object.keys(AllRoles).indexOf(option.value) != -1) {
+                roles.push({roleId: AllRoles[option.value], roleName: option.value});
             }
         }
+
 
         const newUserData = {
             name: name,
             surname: surname,
             age: age,
-            email:email,
+            email: email,
             password: password,
             roles: roles
         };

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
+import ru.kata.spring.boot_security.demo.util.UserNotCreatedException;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -40,9 +41,12 @@ public class UserServiceImpl implements UserService {
         }
         return user.get();
     }
-
+    @Override
     @Transactional
     public boolean saveUser(User user) {
+
+        //Здесь я проверяю есть ли роль у юзера, если ее нет, то добавляю "ROLE_USER"
+        //иначе в БД можно добавить юзера без роли
 
         if (user.getRoles().isEmpty()) {
             user.setRoles(Collections.singleton(new Role(1, "ROLE_USER")));
@@ -55,25 +59,22 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return true;
     }
-
-    @Transactional
-    public boolean saveUser(User user, Set<Role> roles) {
-        user.setRoles(roles);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return true;
-    }
-
-    @Transactional
+    @Override
     public List<User> getListAllUsers() {
         return userRepository.findAll();
     }
 
-    @Transactional()
-    public User findUserById(int id) {
+    @Override
+    public User findUserById(int id){
+
         Optional<User> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new UserNotCreatedException("Юзер не найден");
+        }
         return user.orElse(new User());
     }
+
+    @Override
     @Transactional
     public void updateUser(User user) {
 
@@ -91,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
-
+    @Override
     @Transactional
     public void deleteUser(int id) {
         userRepository.deleteById(id);
